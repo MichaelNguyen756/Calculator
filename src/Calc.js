@@ -43,4 +43,8 @@ Calc.prototype.reset = function(){
 	return this;
 };
 
-module.exports = Calc;
+Calc.prototype.getResult = function(){
+	return this.result;
+};
+
+//module.exports = Calc;

@@ -3,3 +3,16 @@
 	border-radius: 5px;
 	padding: 10px;
 }
+
+.button-row {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.button-row:first-child {
+	padding-top: 0;
+}
+
+.button-row:last-child {
+	padding-bottom: 0;
+}
