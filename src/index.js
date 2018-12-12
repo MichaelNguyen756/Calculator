@@ -1,13 +1,12 @@
 var calc;
 var arithmeticString = '';
 var arithmeticList = [];
-
-$(document).ready(function () {
-	var currentArithmeticObject = {
+var currentArithmeticObject = {
 		number: "",
 		symbol: ""
 	};
 
+$(document).ready(function () {
 	calc = new Calc();
 
 	$(".calc-btn").on("click", function(e) {
@@ -34,6 +33,10 @@ $(document).ready(function () {
 		if(currentArithmeticObject.number !== "" && currentArithmeticObject.symbol !== "")
 			appendArithmeticExpression(currentArithmeticObject);
 
+		if(arithmeticList.some(function(arithmeticObject) { return arithmeticObject.symbol === "*" || arithmeticObject.symbol === "/" })) {
+
+		}
+
 		arithmeticList.reduce((c, arithmeticObject) => {
 			switch(arithmeticObject.symbol) {
 				case "*":
@@ -48,24 +51,12 @@ $(document).ready(function () {
 			};
 		}, calc);
 		
-		arithmeticString = "";
-		arithmeticList = [];
-		currentArithmeticObject = {
-			number: "",
-			symbol: ""
-		};
-
+		resetArithmeticMemory()
 		setDisplay(calc.equals());
 	});
 
 	$("#resetButton").on("click", function(e) {
-		arithmeticString = "";
-		arithmeticList = [];
-		currentArithmeticObject = {
-			number: "",
-			symbol: ""
-		};
-
+		resetArithmeticMemory();
 		setDisplay(0);
 		calc.reset();
 	});
@@ -73,6 +64,25 @@ $(document).ready(function () {
 
 function appendArithmeticExpression(arithmeticObject) {
 	arithmeticList.push(Object.assign({}, arithmeticObject));
+}
+
+function evaluateMultiplicationAndDivision(tempArithmeticList) {
+	let firstFoundObjectIndex = tempArithmeticList.findIndex(function(arithmeticObject) { return arithmeticObject.symbol === "/" || arithmeticObject.symbol === "*" });
+
+	if(firstFoundObjectIndex > 0) {
+		
+	} else {
+		return tempArithmeticList;
+	}
+}
+
+function resetArithmeticMemory() {
+	arithmeticString = "";
+	arithmeticList = [];
+	currentArithmeticObject = {
+		number: "",
+		symbol: ""
+	};
 }
 
 function setDisplay(textToDisplay) {
