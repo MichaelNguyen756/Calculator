@@ -33,10 +33,6 @@ $(document).ready(function () {
 		if(currentArithmeticObject.number !== "" && currentArithmeticObject.symbol !== "")
 			appendArithmeticExpression(currentArithmeticObject);
 
-		if(arithmeticList.some(function(arithmeticObject) { return arithmeticObject.symbol === "*" || arithmeticObject.symbol === "/" })) {
-
-		}
-
 		arithmeticList.reduce((c, arithmeticObject) => {
 			switch(arithmeticObject.symbol) {
 				case "*":
@@ -64,16 +60,6 @@ $(document).ready(function () {
 
 function appendArithmeticExpression(arithmeticObject) {
 	arithmeticList.push(Object.assign({}, arithmeticObject));
-}
-
-function evaluateMultiplicationAndDivision(tempArithmeticList) {
-	let firstFoundObjectIndex = tempArithmeticList.findIndex(function(arithmeticObject) { return arithmeticObject.symbol === "/" || arithmeticObject.symbol === "*" });
-
-	if(firstFoundObjectIndex > 0) {
-		
-	} else {
-		return tempArithmeticList;
-	}
 }
 
 function resetArithmeticMemory() {
