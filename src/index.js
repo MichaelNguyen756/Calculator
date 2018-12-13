@@ -1,28 +1,39 @@
 var calc;
 var arithmeticString = '';
-var arithmeticList = [];
+var arithmeticListStore = [];
+var currentArithmeticList = [];
 var currentArithmeticObject = {
-		number: "",
-		symbol: ""
-	};
+	number: "",
+	symbol: "",
+	childArithmeticList: []
+};
 
 $(document).ready(function () {
 	calc = new Calc();
+	currentArithmeticList = arithmeticListStore;
 
 	$(".calc-btn").on("click", function(e) {
 		var $button = $(e.currentTarget);
 		arithmeticString += $button.data("value");
 
 		if($button.data("button-type") === "number"){
-			if(arithmeticList.length === 0)
+			if(currentArithmeticList.length === 0)
 				currentArithmeticObject.symbol = "+";
 
 			currentArithmeticObject.number += $button.data("value");
 		} else if($button.data("button-type") === "arithmetic") {
-			if(currentArithmeticObject.number !== "")
+			let selectedSymbol = $button.data("value");
+
+			if(currentArithmeticObject.number !== "" || (selectedSymbol === "(" || selectedSymbol === ")") && currentArithmeticObject.symbol !== "")
 				appendArithmeticExpression(currentArithmeticObject);
 
-			currentArithmeticObject.symbol = $button.data("value");
+			currentArithmeticObject.symbol = selectedSymbol;
+
+			if(selectedSymbol === "(" || selectedSymbol === ")") {
+				appendArithmeticExpression(currentArithmeticObject);
+				currentArithmeticObject.symbol = "";
+			}
+
 			currentArithmeticObject.number = "";
 		}
 
@@ -33,20 +44,7 @@ $(document).ready(function () {
 		if(currentArithmeticObject.number !== "" && currentArithmeticObject.symbol !== "")
 			appendArithmeticExpression(currentArithmeticObject);
 
-		arithmeticList.reduce((c, arithmeticObject) => {
-			switch(arithmeticObject.symbol) {
-				case "*":
-					return c.multiply(Number.parseFloat(arithmeticObject.number));
-				case "-":
-					return c.subtract(Number.parseFloat(arithmeticObject.number));
-				case "/":
-					return c.divide(Number.parseFloat(arithmeticObject.number));
-				case "+":
-				default:
-					return c.add(Number.parseFloat(arithmeticObject.number));
-			};
-		}, calc);
-		
+		evaluateExpression(currentArithmeticList);
 		resetArithmeticMemory()
 		setDisplay(calc.equals());
 	});
@@ -59,12 +57,12 @@ $(document).ready(function () {
 });
 
 function appendArithmeticExpression(arithmeticObject) {
-	arithmeticList.push(Object.assign({}, arithmeticObject));
+	currentArithmeticList.push(Object.assign({}, arithmeticObject));
 }
 
 function resetArithmeticMemory() {
 	arithmeticString = "";
-	arithmeticList = [];
+	arithmeticListStore = [];
 	currentArithmeticObject = {
 		number: "",
 		symbol: ""
@@ -75,6 +73,29 @@ function setDisplay(textToDisplay) {
 	$("#numberDisplay").val(textToDisplay);
 }
 
-function calculateExpression(expression) {
+function evaluateExpression(arithmeticList) {
+	let tempCalc = new Calc();
+	let bracketsIndices = {
+		first: arithmeticList.findIndex(function (o) { o.symbol === "(" }),
+		last: arithmeticList.lastIndexOf(function (o) { o.symbol === ")" })
+	};
 
+	if (bracketsIndices.first !== -1)
+
+	arithmeticList.reduce((c, arithmeticObject, index) => {
+		switch(arithmeticObject.symbol) {
+			case "(":
+				evaluateExpression(arithmeticList.slice)
+			break;
+			case "*":
+				return c.multiply(Number.parseFloat(arithmeticObject.number));
+			case "-":
+				return c.subtract(Number.parseFloat(arithmeticObject.number));
+			case "/":
+				return c.divide(Number.parseFloat(arithmeticObject.number));
+			case "+":
+			default:
+				return c.add(Number.parseFloat(arithmeticObject.number));
+		};
+	}, tempCalc);
 }
