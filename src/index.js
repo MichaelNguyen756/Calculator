@@ -22,9 +22,8 @@ $(document).ready(function () {
 			var isRightBracketSelected = selectedValue === ")";
 			var isBracketSelected =  isLeftBracketSelected || isRightBracketSelected;
 
-			if(isLeftBracketSelected) {
+			if(isLeftBracketSelected)
 				currentArithmeticObject.number = "";
-			}
 
 			if((currentArithmeticObject.number !== "" || 
 					isBracketSelected && currentArithmeticObject.symbol !== "" || isBracketSelected) || 
